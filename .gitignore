@@ -1,0 +1,8 @@
+# Environment normalisation:
+/.bundle/
+/vendor/bundle
+
+# swap files
+*.swp
+*.swo
+*~
