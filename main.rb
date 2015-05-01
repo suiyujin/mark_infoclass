@@ -1,4 +1,5 @@
 require 'scrape_report.rb'
+require 'make_csv.rb'
 
 class Main
 
@@ -16,6 +17,11 @@ class Main
     moodle.scrape(report_page)
 
     add_matrix(moodle.evaluations)
+  end
+
+  def export_csv(file_name)
+    csv = MakeCsv.new(file_name)
+    csv.write(@evaluations_matrix)
   end
 
   def add_matrix(evaluations)
