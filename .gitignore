@@ -9,3 +9,6 @@
 
 # Environment Variables
 .env
+
+# result dir
+/result
