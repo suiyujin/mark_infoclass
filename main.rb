@@ -16,13 +16,11 @@ class Main
     moodle.scrape(report_page)
 
     add_matrix(moodle.evaluations)
-
-    binding.pry
   end
 
   def add_matrix(evaluations)
     @evaluations_matrix.each_with_index do |evaluations_by_student, student_num|
-      evaluations_by_student << evaluations[student_num]
+      evaluations_by_student << evaluations[student_num].to_f
       evaluations_by_student << ''
     end
   end
