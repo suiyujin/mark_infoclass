@@ -12,13 +12,14 @@ class ScrapeReport
   POOR_SCORE = 0.5
   BAD_SCORE = 0.0
 
-  attr_reader :evaluations
+  attr_reader :evaluations, :feedback
 
   def initialize(report_num)
     @report_num = report_num
     @agent = Mechanize.new
     @agent.request_headers = { 'accept-language' => 'en' }
     @evaluations = Array.new(STUDENTS_NUM)
+    @feedback = Array.new(STUDENTS_NUM)
   end
 
   def login(url)
@@ -60,7 +61,7 @@ class ScrapeReport
       unless @report_num == 19
         @evaluations[i] = submit_file?(student, check_index, '.docx') ? GOOD_SCORE : BAD_SCORE
       else
-        @evaluations[i] = calc_score_of_report_19(student, check_index)
+        @evaluations[i], @feedback[i] = calc_score_of_report_19(student, check_index)
       end
     end
   end
@@ -68,11 +69,13 @@ class ScrapeReport
   def calc_score_of_report_19(student, check_index)
     case true
     when submit_file?(student, check_index, '.pdf') && submit_file?(student, check_index, '.docx')
-      GOOD_SCORE
-    when submit_file?(student, check_index, '.pdf') || submit_file?(student, check_index, '.docx')
-      POOR_SCORE
+      [GOOD_SCORE, '']
+    when submit_file?(student, check_index, '.pdf') && !submit_file?(student, check_index, '.docx')
+      [POOR_SCORE, 'Wordファイルが提出されていません。']
+    when submit_file?(student, check_index, '.docx') && !submit_file?(student, check_index, '.pdf')
+      [POOR_SCORE, 'PDFファイルが提出されていません。']
     else
-      BAD_SCORE
+      [BAD_SCORE, '']
     end
   end
 

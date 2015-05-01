@@ -16,7 +16,8 @@ class Main
     report_page = moodle.move_to_report_page(home_page)
     moodle.scrape(report_page)
 
-    add_matrix(moodle.evaluations)
+    add_matrix_f(moodle.evaluations)
+    add_matrix(moodle.feedback) if report_num == 19
   end
 
   def export_csv(file_name)
@@ -24,10 +25,14 @@ class Main
     csv.write(@evaluations_matrix)
   end
 
-  def add_matrix(evaluations)
+  def add_matrix(data)
     @evaluations_matrix.each_with_index do |evaluations_by_student, student_num|
-      evaluations_by_student << evaluations[student_num].to_f
-      evaluations_by_student << ''
+      evaluations_by_student << data[student_num]
     end
   end
+
+  def add_matrix_f(data)
+    add_matrix(data.map { |d| d.to_f })
+  end
+
 end
