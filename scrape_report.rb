@@ -8,6 +8,10 @@ class ScrapeReport
   HEADER_NUM = 1
   STUDENTS_NUM = 89
 
+  GOOD_SCORE = 1.0
+  POOR_SCORE = 0.5
+  BAD_SCORE = 0.0
+
   attr_reader :evaluations
 
   def initialize(report_num)
@@ -51,7 +55,22 @@ class ScrapeReport
 
     students = report_page_sorted.search('tr:not(.emptyrow)').drop(HEADER_NUM)
     students.each_with_index do |student, i|
-      @evaluations[i] = submit_file?(student, check_index, '.docx') ? 1 : 0
+      unless @report_num == 19
+        @evaluations[i] = submit_file?(student, check_index, '.docx') ? GOOD_SCORE : BAD_SCORE
+      else
+        @evaluations[i] = calc_score_of_report_19(student, check_index)
+      end
+    end
+  end
+
+  def calc_score_of_report_19(student, check_index)
+    case true
+    when submit_file?(student, check_index, '.pdf') && submit_file?(student, check_index, '.docx')
+      GOOD_SCORE
+    when submit_file?(student, check_index, '.pdf') || submit_file?(student, check_index, '.docx')
+      POOR_SCORE
+    else
+      BAD_SCORE
     end
   end
 
