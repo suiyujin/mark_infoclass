@@ -22,6 +22,7 @@ class ScrapeReport
   end
 
   def login(url)
+    p 'msg: login!'
     top_page = @agent.get(url)
     login_page = top_page.link_with(:text => 'Log in').click
 
@@ -46,6 +47,7 @@ class ScrapeReport
   end
 
   def scrape(report_page)
+    p 'msg: scrape!'
     # 姓の順に並べ替える
     report_page_sorted = report_page.link_with(href: /lastname/).click
 
