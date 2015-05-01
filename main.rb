@@ -32,7 +32,7 @@ class Main
   end
 
   def add_matrix_f(data)
-    add_matrix(data.map { |d| d.to_f })
+    add_matrix(data.map(&:to_f))
   end
 
 end
